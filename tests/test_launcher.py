@@ -31,4 +31,3 @@ def test_running_app_still_recovers_missing_ollama():
     spawn, wait = Mock(), Mock()
     ensure_services('http://app', 'http://ollama', Mock(side_effect=['ready', 'missing']), spawn, wait)
     assert [x.args[0] for x in spawn.call_args_list] == ['ollama']
-
