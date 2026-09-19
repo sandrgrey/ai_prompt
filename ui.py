@@ -111,19 +111,20 @@ def build_ui(service, settings):
     handlers = UIHandlers(service, settings)
     with gr.Blocks(title="Image → Prompt", analytics_enabled=False, delete_cache=(600, 3600)) as demo:
         state = gr.State(Session())
-        gr.HTML('<div class="masthead"><div><span class="eyebrow">LOCAL VISION WORKSPACE</span><h1>Image <span>→</span> Prompt</h1><p>See the details. Rebuild the image.</p></div><div class="local-badge">● LOCAL PIPELINE</div></div>')
+        gr.HTML('<header class="masthead"><h1>Image <span>→</span> Prompt</h1><span class="local-badge">● LOCAL</span></header>', elem_id="app-header")
         with gr.Row(equal_height=False):
             with gr.Column(scale=5, min_width=340):
-                gr.Markdown("### 01 / Source image")
                 upload = gr.Image(type="filepath", sources=["upload"], label="Reference image", height=340)
-                with gr.Row():
+                with gr.Row(elem_id="image-actions"):
                     analyze = gr.Button("ANALYZE IMAGE", variant="secondary")
                     reanalyze = gr.Button("RE-ANALYZE", variant="secondary")
+                    generate = gr.Button("GENERATE PROMPT", variant="primary")
                 gr.Markdown("### 02 / Prompt direction")
                 with gr.Row():
                     generator = gr.Dropdown(["Universal", "FLUX", "SDXL", "Stable Diffusion", "Leonardo", "Midjourney"], value="FLUX", label="Target generator")
                     detail = gr.Dropdown(["Short", "Medium", "Detailed", "Extreme"], value="Detailed", label="Detail level")
-                reconstruction = gr.Radio(["Exact", "Close", "Balanced", "Creative"], value="Exact", label="Reconstruction")
+                with gr.Accordion("Reconstruction", open=False):
+                    reconstruction = gr.Radio(["Exact", "Close", "Balanced", "Creative"], value="Exact", label="Reconstruction", show_label=False)
                 include = gr.CheckboxGroup([("Materials / textures" if x == "materials" else x.title(), x) for x in INCLUDE], value=list(INCLUDE), label="Include in prompt")
                 negative_enabled = gr.Checkbox(False, label="Generate negative prompt")
                 mj = gr.Textbox(label="Midjourney parameters", placeholder="--ar 3:2 --stylize 50", visible=False)
@@ -133,7 +134,6 @@ def build_ui(service, settings):
                     temperature = gr.Slider(.05, 2, value=settings.temperature, step=.05, label="Temperature")
                     top_p = gr.Slider(.05, 1, value=settings.top_p, step=.05, label="Top P")
                     sample = gr.Checkbox(settings.do_sample, label="Sample analysis tokens")
-                generate = gr.Button("GENERATE PROMPT", variant="primary", size="lg")
             with gr.Column(scale=7, min_width=420):
                 gr.Markdown("### 03 / Results")
                 status = gr.Textbox(value="Upload an image to begin.", label="Pipeline status", interactive=False)

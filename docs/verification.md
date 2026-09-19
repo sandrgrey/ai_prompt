@@ -1,26 +1,40 @@
-# Проверка реализации
+# Результаты проверки — 19 сентября 2026
 
-Проверки перед первой публикацией:
+## Подтверждено
 
-- Python 3.11.16, PyTorch 2.10.0+cu126, Transformers 5.17.0, Gradio 6.27.0.
-- Чистое `.venv`; зависимости установлены, `pip check`: No broken requirements found.
-- `pytest -q`: 64 passed. Проверка syntax/import через compileall прошла.
-- Приложение запущено, GET http://127.0.0.1:7860/ вернул HTTP 200.
-- NVIDIA GeForce RTX 2060 SUPER, 8 ГБ: CUDA доступна, BF16 аппаратно не поддерживается, AUTO выбирает 4BIT.
-- Тесты проверяют изображения, EXIF/RGB, SHA-256, кэш, одновременные запросы, JSON repair, Ollama errors, UI state, export, OOM recovery.
-- Qwen3 4B реально выполнила FLUX (~29 сек) и SDXL (~12 сек) из тестового описания, включая negative prompt. Character DNA корректно вернула пустые характеристики для геометрических фигур.
-- Официальные веса JoyCaption полностью скачаны. Первый прогон загрузил модель на GPU; законченный результат vision inference не был получен до прерывания сессии. **Полный end-to-end GPU smoke пока не подтверждён.**
-- После этого исправлены исключения квантования vision tower/projector для путей модулей Transformers 5; добавлен regression-тест.
+- `pytest -q`: **64 passed**; `pip check`: **No broken requirements found**.
+- Python 3.11.16, torch 2.10.0+cu126, Transformers 5.17.0, Gradio 6.27.0.
+- Реальный браузерный цикл: PNG → JoyCaption **4BIT / cuda:0** → Qwen3 4B → FLUX и SDXL → TXT/JSON.
+- После перезапуска с актуальным кодом: загрузка JoyCaption **27.50 сек**, анализ **9.85 сек** (384 max tokens, greedy). Лог: `.runtime/server-current.log`, события 20:20:06–20:20:43 UTC.
+- Изображение: `.runtime/smoke/geometric-reference.png`. Описание распознало красный круг, синий четырёхугольник, зелёный треугольник и фон. Это технический тест, не оценка качества на фотографиях.
+- В браузере проверены загрузка, мастер-описание, FLUX, SDXL с negative prompt, буфер обмена (текст прочитан обратно), SAVE TXT, SAVE JSON, JSON STRUCTURE, Character DNA и диагностика.
+- Смена FLUX → SDXL, извлечение структуры и Character DNA не запустили повторный vision inference: в логе актуального сервера один `Analysis start` / `Analysis complete`, диагностика показывает один cached analysis.
+- Character DNA для геометрических фигур вернула пустые характеристики.
+- `scripts/smoke_test.py --stage prompts` завершился успешно на сохранённом реальном CPU-анализе. Проверены FLUX/SDXL, файлы экспорта и сохранение master при недоступной Ollama (отдельный неработающий порт, основной сервер не выключался). Отчёт `.runtime/smoke/prompts-report.json`.
+- Предыдущий CPU-анализ тоже завершился: **276.36 сек**, 133 слова, проверка кэша прошла. Результат `.runtime/smoke/analysis-record.json`.
 
-Воспроизведение полного прогона:
+## Найденные проблемы и действия
 
-```bat
-.venv\Scripts\python.exe -m pytest -q
-.venv\Scripts\python.exe -m pip check
-.venv\Scripts\python.exe scripts\check_gpu.py
-.venv\Scripts\python.exe scripts\smoke_test.py --stage all
+1. В Ollama отсутствовала настроенная `qwen3:4b`, из-за чего прежний полный smoke завершился HTTP 404 после успешного vision. Модель снова скачана, SHA256 проверена Ollama; API подтверждает её наличие. Другие модели не изменялись.
+2. Старый сервер был запущен до исправления исключений квантования. Он перезапущен; актуальная версия успешно выполнила GPU-анализ.
+3. При занятой видеопамяти загрузка сильно замедлялась. Пользователь освободил память; перед контрольным запуском было свободно около 7.3 ГБ. AUTO зависит от свободной памяти: для 4BIT нужен порог 6.5 ГБ, иначе выбирается CPU.
+4. **Замечание к качеству:** Qwen3 4B включила в negative prompt слишком общие слова (`background`, `composition`, `lighting`). Генерация технически работает, но качество такого negative требует ручной проверки; улучшение его формирования остаётся задачей. На этом проходе шаблоны не менялись.
+
+## Ограничения
+
+- GPU-проверка подтверждена браузерным циклом, а не новым `--stage all` отчётом. Не выдавать старый прерванный all-run за успешный.
+- Реально проверены FLUX и SDXL на одной синтетической картинке. Остальные генераторы покрыты unit-тестами; качество на фотографиях и портретах отдельно не оценивалось.
+- После смены кода/config сервер нужно перезапускать; текущая загрузка модели сохраняется между запросами.
+
+## Воспроизведение
+
+```powershell
+Set-Location E:\codex\ai_image
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m pip check
+.\.venv\Scripts\python.exe scripts\check_gpu.py
+# Не запускать параллельно второй экземпляр JoyCaption на этой видеокарте:
+.\.venv\Scripts\python.exe scripts\smoke_test.py --stage all
 ```
 
-Smoke создаёт собственное геометрическое изображение и проверяет JoyCaption → FLUX/SDXL, TXT/JSON export, работу без Ollama и число vision-вызовов. Результаты — `.runtime/smoke/`.
-
-Исходная папка Documents защищена Windows Controlled Folder Access. Проект создан в `E:\codex\ai_image`; настройки защиты не изменялись.
+UI: http://127.0.0.1:7860. Рабочая папка `E:\codex\ai_image`; исходная Documents блокировала запись через Controlled Folder Access.

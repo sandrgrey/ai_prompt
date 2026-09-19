@@ -163,7 +163,7 @@ requirements*.txt, .env.example зависимости и пример наст�
 .venv\Scripts\python.exe scripts\check_gpu.py
 ```
 
-Результаты проверок и ограничения тестовой машины зафиксированы в [docs/verification.md](docs/verification.md). Unit-тесты используют подмену тяжёлых vision/HTTP границ и сами по себе не доказывают успешный GPU inference. Полный GPU smoke-прогон пока не подтверждён.
+Результаты проверок и ограничения тестовой машины зафиксированы в [docs/verification.md](docs/verification.md). Unit-тесты используют подмену тяжёлых vision/HTTP границ и сами по себе не доказывают успешный GPU inference. Реальный браузерный цикл JoyCaption 4BIT → Qwen → FLUX/SDXL → экспорт подтверждён; ограничения качества и детали проверки приведены в отчёте.
 
 ## Troubleshooting
 

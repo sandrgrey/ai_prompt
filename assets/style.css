@@ -1,15 +1,20 @@
 :root { color-scheme: dark; }
 body, .gradio-container { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important; background: #0c1018 !important; color: #e6edf5 !important; }
-.gradio-container { max-width: 1480px !important; padding: 32px 38px !important; }
-.masthead { display:flex; justify-content:space-between; align-items:center; padding:10px 0 28px; border-bottom:1px solid #293342; margin-bottom:24px; }
-.eyebrow { font-size:10px; letter-spacing:.24em; color:#8898af; font-weight:700; }
-.masthead h1 { font-size:36px; font-weight:650; letter-spacing:-1.5px; margin:8px 0; line-height:1.2; }
-.masthead h1 span { color:#a5b4fc; padding:0 7px; }
-.masthead p { color:#8e9eb5; font-size:14px; margin:0; }
-.local-badge { color:#85d9c1; border:1px solid #28483f; background:#11251f; border-radius:30px; font-size:10px; font-weight:700; letter-spacing:.1em; padding:10px 14px; }
+.gradio-container { max-width: 1480px !important; padding: 0 38px 32px !important; }
+.masthead { box-sizing:border-box; display:flex; flex-wrap:nowrap; justify-content:space-between; align-items:center; gap:12px; height:30px; max-height:30px; padding:0; border-bottom:1px solid #293342; margin:0; white-space:nowrap; }
+.masthead h1 { font-size:16px; font-weight:650; letter-spacing:-.3px; margin:0; line-height:24px; }
+.masthead h1 span { color:#a5b4fc; padding:0 4px; }
+.local-badge { color:#85d9c1; flex-shrink:0; font-size:10px; font-weight:700; letter-spacing:.08em; line-height:20px; }
 h3 { font-size:12px !important; text-transform:uppercase; letter-spacing:.14em; color:#9daec5 !important; margin:8px 0 12px !important; }
 button.primary { background:linear-gradient(110deg,#7467e8,#9276ed) !important; border-color:#9b8af5 !important; color:white !important; letter-spacing:.08em; min-height:54px; }
 button.secondary { border-color:#303c50 !important; }
 textarea, input { font-family:inherit !important; }
 .footnote { color:#77869e; font-size:12px; }
-@media(max-width:700px) { .gradio-container { padding:18px !important; } .local-badge { display:none; } .masthead h1 { font-size:30px; } }
+@media(max-width:700px) { .gradio-container { padding:0 18px 18px !important; } }
+
+.gradio-container > .main { padding-top:0 !important; }
+#app-header .html-container { padding:0 !important; }
+.gradio-container .contain > .column { gap:0 !important; }
+
+#image-actions { flex-wrap:nowrap !important; gap:8px; }
+#image-actions button { flex:1 1 0 !important; min-width:0 !important; min-height:40px; padding:8px 4px; font-size:12px; letter-spacing:0; }
