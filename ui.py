@@ -114,7 +114,7 @@ def build_ui(service, settings):
         gr.HTML('<header class="masthead"><h1>Image <span>→</span> Prompt</h1><span class="local-badge">● LOCAL</span></header>', elem_id="app-header")
         with gr.Row(equal_height=False):
             with gr.Column(scale=5, min_width=340):
-                upload = gr.Image(type="filepath", sources=["upload"], label="Reference image", height=340)
+                upload = gr.Image(type="filepath", sources=["upload"], label="Reference image", height=340, elem_id="source-image")
                 with gr.Row(elem_id="image-actions"):
                     analyze = gr.Button("ANALYZE IMAGE", variant="secondary")
                     reanalyze = gr.Button("RE-ANALYZE", variant="secondary")

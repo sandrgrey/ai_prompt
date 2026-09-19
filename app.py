@@ -23,7 +23,7 @@ def main():
     demo.queue(max_size=16, default_concurrency_limit=1).launch(
         server_name=settings.gradio_host, server_port=settings.gradio_port,
         share=False, inbrowser=False, show_error=False,
-        css=CSS, js="() => document.documentElement.classList.add('dark')",
+        css=CSS, js=(ROOT / "assets" / "app.js").read_text(encoding="utf-8-sig"),
         theme=gr.themes.Base(primary_hue='violet', neutral_hue='slate',
                              font=['Segoe UI', 'Arial', 'sans-serif'],
                              font_mono=['Consolas', 'monospace']),
