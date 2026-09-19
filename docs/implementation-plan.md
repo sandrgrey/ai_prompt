@@ -36,17 +36,29 @@ diagnostics() -> dict. AnalysisRecord: image_hash, image_name, master, options, 
 
 core.export.export_results(settings, record, result, structured, character, format) -> list[str].
 
-## Фазы
+## Выполненные фазы (актуализировано 19 сентября 2026)
 
-- [ ] 1. Python 3.11, чистое .venv, зависимости, диагностика.
-- [ ] 2. Тесты validation/hash/config/device; JoyCaption/image_utils/model_manager.
-- [ ] 3. Тест кэша: одна картинка → FLUX → SDXL → Leonardo = один vision call.
-- [ ] 4–6. OllamaClient, templates, JSON, Character DNA; HTTP failure/repair/filter tests.
-- [ ] 7–9. Gradio UI, TXT/JSON экспорт, diagnostics, понятные ошибки.
-- [ ] 10. Windows setup/start, README, pytest, pip check, compileall.
-- [ ] Реальный smoke: GPU master → Qwen FLUX/SDXL → экспорт; отсутствие Ollama; browser UI.
+- [x] 1. Python 3.11, чистое .venv, зависимости, диагностика.
+- [x] 2. Тесты validation/hash/config/device; JoyCaption/image_utils/model_manager.
+- [x] 3. Тест кэша: одна картинка → FLUX → SDXL → Leonardo = один vision call.
+- [x] 4–6. OllamaClient, templates, JSON, Character DNA; HTTP failure/repair/filter tests.
+- [x] 7–9. Gradio UI, TXT/JSON экспорт, diagnostics, понятные ошибки.
+- [x] 10. Windows setup/start, README, pytest, pip check, compileall.
+- [x] Реальный smoke: GPU master → Qwen FLUX/SDXL → экспорт; отсутствие Ollama; browser UI.
 
 ## Журнал
 
 - Исходная пустая папка Documents заблокирована Windows Controlled Folder Access (Defender event 1123). Работа перенесена в E:\codex\ai_image без изменения защиты.
-- Работа в предоставленном пустом проекте, без публикации Git. Модули разделены между исполнителями по subagent-driven-development.
+- Проект опубликован в https://github.com/sandrgrey/ai_prompt, ветка main. Git после временного отключения снова подключён по просьбе пользователя.
+
+## Последующие работы
+
+- [x] Уменьшить header до 30 px, убрать лишние отступы и заголовки.
+- [x] Собрать анализ, повторный анализ и генерацию в один ряд.
+- [x] Сделать Reconstruction и Include in prompt сворачивающимися.
+- [x] Добавить компактный/развёрнутый Final Prompt и выровнять блоки на широком экране.
+- [x] Исправить замену изображения через drag-and-drop; автоматические тесты и подтверждение пользователя получены.
+- [ ] Позже улучшить качество negative prompt — пользователь отложил работу над качеством.
+- [ ] Отдельно оценить фотографии, портреты и остальные генераторы на реальных примерах.
+
+GPU pipeline проверен через браузер; отдельный `--stage all` отчёт не завершён. Детали и границы проверок — в verification.md. Следующие изменения UI делать небольшими шагами по указаниям пользователя.
