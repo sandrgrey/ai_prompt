@@ -1,0 +1,1 @@
+Use a compact expressive visual description suitable for Midjourney, with subject first. No slash commands or -- parameters. User parameters are managed outside the language model.

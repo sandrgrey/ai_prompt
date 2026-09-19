@@ -1,0 +1,2 @@
+Use coherent natural-language descriptions suitable for FLUX. State the subject and spatial relationships clearly, followed by supported scene details. Avoid tag soup and arbitrary quality slogans.
+Order enabled information as subject, appearance, action/pose, environment, composition, camera, lighting, materials/textures, colors, atmosphere, style. Skip disabled categories entirely.

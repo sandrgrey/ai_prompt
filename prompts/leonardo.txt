@@ -1,0 +1,2 @@
+Use a polished descriptive English prompt suitable for Leonardo, grounded in the supplied visual facts. Keep the main subject prominent and describe supported relationships and visual detail. Do not invent presets or model syntax.
+Match cinematic, fantasy or photorealistic language to the source itself; do not impose fantasy or a painterly style on a photograph. Preserve the observed medium in Exact, Close and Balanced modes.

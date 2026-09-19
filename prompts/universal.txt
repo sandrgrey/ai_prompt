@@ -1,0 +1,1 @@
+Use a clear portable English visual description understandable across image generators, with subject first and supported spatial details following. No model-specific syntax.

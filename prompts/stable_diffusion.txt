@@ -1,0 +1,1 @@
+Use compact comma-separated descriptive phrases suitable for Stable Diffusion. Prioritize the subject, pose, composition and enabled visual details. Do not invent weights, embeddings, LoRA tags, artist names or quality tokens. Keep any negative prompt separate.

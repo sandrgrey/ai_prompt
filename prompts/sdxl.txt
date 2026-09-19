@@ -1,0 +1,1 @@
+Use a concise ordered mix of descriptive phrases and natural language suitable for SDXL. Put the subject and defining visual attributes first. Keep the separate negative prompt out of the positive prompt.
