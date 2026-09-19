@@ -128,12 +128,12 @@ def build_ui(service, settings):
                     include = gr.CheckboxGroup([("Materials / textures" if x == "materials" else x.title(), x) for x in INCLUDE], value=list(INCLUDE), label="Include in prompt", show_label=False)
                 negative_enabled = gr.Checkbox(False, label="Generate negative prompt")
                 mj = gr.Textbox(label="Midjourney parameters", placeholder="--ar 3:2 --stylize 50", visible=False)
-                with gr.Accordion("Advanced analysis", open=False):
+                with gr.Accordion("Advanced analysis (настройки описания)", open=False):
                     gr.Markdown(f"JoyCaption startup mode: **{settings.joycaption_mode}** · Change configuration and restart to switch mode.")
-                    max_tokens = gr.Slider(32, 4096, value=settings.max_new_tokens, step=32, label="Maximum new tokens")
-                    temperature = gr.Slider(.05, 2, value=settings.temperature, step=.05, label="Temperature")
-                    top_p = gr.Slider(.05, 1, value=settings.top_p, step=.05, label="Top P")
-                    sample = gr.Checkbox(settings.do_sample, label="Sample analysis tokens")
+                    max_tokens = gr.Slider(32, 4096, value=settings.max_new_tokens, step=32, label="Maximum new tokens (лимит длины описания)")
+                    temperature = gr.Slider(.05, 2, value=settings.temperature, step=.05, label="Temperature (случайность при sampling)")
+                    top_p = gr.Slider(.05, 1, value=settings.top_p, step=.05, label="Top P (выбор слов при sampling)")
+                    sample = gr.Checkbox(settings.do_sample, label="Sample analysis tokens (включить случайность)")
             with gr.Column(scale=7, min_width=420):
                 status = gr.Textbox(value="Upload an image to begin.", label="Pipeline status", interactive=False)
                 with gr.Tabs():
