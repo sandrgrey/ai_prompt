@@ -18,3 +18,15 @@ textarea, input { font-family:inherit !important; }
 
 #image-actions { flex-wrap:nowrap !important; gap:8px; }
 #image-actions button { flex:1 1 0 !important; min-width:0 !important; min-height:40px; padding:8px 4px; font-size:12px; letter-spacing:0; }
+
+#expand-prompt { align-self:flex-end; flex-grow:0; min-width:0; width:auto; padding:2px 0; min-height:24px; border:0; background:transparent; box-shadow:none; color:#8ecbff; font-size:12px; }
+
+/* Align the compact result with the image action row in the desktop layout. */
+@media(min-width:1000px) {
+  #final-prompt.prompt-compact { height:242px !important; min-height:242px !important; }
+  #final-prompt.prompt-compact textarea { height:192px !important; min-height:192px !important; max-height:192px !important; }
+}
+
+@media(min-width:1000px) { #export-actions { margin-top:0; } }
+
+@media(min-width:1000px) { #prompt-direction { margin-top:40px; } }

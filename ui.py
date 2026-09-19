@@ -119,13 +119,13 @@ def build_ui(service, settings):
                     analyze = gr.Button("ANALYZE IMAGE", variant="secondary")
                     reanalyze = gr.Button("RE-ANALYZE", variant="secondary")
                     generate = gr.Button("GENERATE PROMPT", variant="primary")
-                gr.Markdown("### 02 / Prompt direction")
-                with gr.Row():
+                with gr.Row(elem_id="prompt-direction"):
                     generator = gr.Dropdown(["Universal", "FLUX", "SDXL", "Stable Diffusion", "Leonardo", "Midjourney"], value="FLUX", label="Target generator")
                     detail = gr.Dropdown(["Short", "Medium", "Detailed", "Extreme"], value="Detailed", label="Detail level")
                 with gr.Accordion("Reconstruction", open=False):
                     reconstruction = gr.Radio(["Exact", "Close", "Balanced", "Creative"], value="Exact", label="Reconstruction", show_label=False)
-                include = gr.CheckboxGroup([("Materials / textures" if x == "materials" else x.title(), x) for x in INCLUDE], value=list(INCLUDE), label="Include in prompt")
+                with gr.Accordion("Include in prompt", open=False):
+                    include = gr.CheckboxGroup([("Materials / textures" if x == "materials" else x.title(), x) for x in INCLUDE], value=list(INCLUDE), label="Include in prompt", show_label=False)
                 negative_enabled = gr.Checkbox(False, label="Generate negative prompt")
                 mj = gr.Textbox(label="Midjourney parameters", placeholder="--ar 3:2 --stylize 50", visible=False)
                 with gr.Accordion("Advanced analysis", open=False):
@@ -135,11 +135,12 @@ def build_ui(service, settings):
                     top_p = gr.Slider(.05, 1, value=settings.top_p, step=.05, label="Top P")
                     sample = gr.Checkbox(settings.do_sample, label="Sample analysis tokens")
             with gr.Column(scale=7, min_width=420):
-                gr.Markdown("### 03 / Results")
                 status = gr.Textbox(value="Upload an image to begin.", label="Pipeline status", interactive=False)
                 with gr.Tabs():
                     with gr.Tab("Final Prompt"):
-                        final = gr.Textbox(label="Final prompt", lines=17, interactive=False, placeholder="Your reconstructed prompt appears here.")
+                        final = gr.Textbox(label="Final prompt", lines=8, max_lines=8, elem_id="final-prompt", elem_classes=["prompt-compact"], interactive=False, autoscroll=False, placeholder="Your reconstructed prompt appears here.")
+                        prompt_expanded = gr.State(False)
+                        expand_prompt = gr.Button("Показать больше", size="sm", elem_id="expand-prompt")
                     with gr.Tab("Negative Prompt"):
                         negative = gr.Textbox(label="Negative prompt", lines=17, interactive=False)
                     with gr.Tab("Master Analysis"):
@@ -154,12 +155,17 @@ def build_ui(service, settings):
                     with gr.Tab("System / Diagnostics"):
                         diagnostics = gr.JSON(label="Local runtime diagnostics", value={})
                         refresh = gr.Button("REFRESH DIAGNOSTICS")
-                with gr.Row():
+                with gr.Row(elem_id="export-actions"):
                     copy = gr.Button("COPY PROMPT")
                     save_txt = gr.Button("SAVE TXT")
                     save_json = gr.Button("SAVE JSON")
                 files = gr.File(label="Exported files", file_count="multiple", interactive=False)
                 gr.Markdown("Vision analysis is reused when you change the target generator. Exports are saved only when requested.", elem_classes=["footnote"])
+        def toggle_prompt(expanded):
+            expanded = not expanded
+            rows = 17 if expanded else 8
+            return expanded, gr.update(lines=rows, max_lines=rows, elem_classes=[] if expanded else ["prompt-compact"]), gr.update(value="Свернуть" if expanded else "Показать больше")
+        expand_prompt.click(toggle_prompt, prompt_expanded, [prompt_expanded, final, expand_prompt], queue=False, show_progress="hidden")
         outputs = [state, final, negative, master, structured, character, character_text, status, files]
         inputs = [state, upload, max_tokens, temperature, top_p, sample, generator, detail, reconstruction, include, negative_enabled, mj]
         event_options = dict(concurrency_id="pipeline", concurrency_limit=1)
